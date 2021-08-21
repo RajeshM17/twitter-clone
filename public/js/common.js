@@ -30,11 +30,13 @@ $('.postsContainer').on('click','.likeButton',async(event)=>{
     button.find("span").text(postData.data.likes.length);
 
 })
-$('#submitReplyButton').click((event)=>{
+$('#submitReplyButton').click(async(event)=>{
 
     const element=$(event.target);
     const postText=$('#reply-text-container').val();
-    console.log(postText);
+    const replyTo=element.attr('data-id');
+    // console.log(replyTo);
+    const postdata=await axios.post('/api/post',{content:postText,replyTo:replyTo})
 
 })
 
@@ -42,7 +44,7 @@ $('#replyModal').on('show.bs.modal',async(event)=>{
     const button=$(event.relatedTarget);
 
     const postId=getPostIdFromElement(button);
-    
+    $('#submitReplyButton').attr('data-id',postId);
     const postData=await axios.get(`/api/posts/${postId}`);
     const html=createPostHtml(postData.data);
     $('#originalPostContainer').empty();
@@ -73,7 +75,7 @@ function createPostHtml(postData) {
 
     const displayName = postedBy.firstName + " " + postedBy.lastName;
     const timestamp = timeDifference(new Date(),new Date(postData.createdAt));
-
+    const replyTo=postData.replyTo?`replying to ${postData.replyTo}`:""
 
     return `<div class='post' data-id='${postData._id}'>
 
@@ -86,6 +88,7 @@ function createPostHtml(postData) {
                             <a href='/profile/${postedBy.username}' class='displayName'>${displayName}</a>
                             <span class='username'>@${postedBy.username}</span>
                             <span class='date'>${timestamp}</span>
+                            <div>${replyTo}</div>
                         </div>
                         <div class='postBody'>
                             <span>${postData.content}</span>

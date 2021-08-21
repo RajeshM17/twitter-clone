@@ -8,7 +8,7 @@ const User = require('../../models/user');
 router.get('/api/post',isLoggedIn, async(req, res) => {
     
     const posts = await Post.find({}).populate('postedBy');
-
+    console.log(posts);
     res.json(posts);
 })
 
@@ -20,9 +20,15 @@ router.get('/api/posts/:id',async(req,res)=>{
 // Create the new post
 router.post('/api/post',isLoggedIn,async(req, res) => {
 
-    const post = {
+    let post = {
         postedBy: req.user,
         content:req.body.content
+    }
+    if(req.body.replyTo){
+        post={
+            ...post,
+            replyTo:req.body.replyTo
+        }
     }
 
     const newPost=await Post.create(post);

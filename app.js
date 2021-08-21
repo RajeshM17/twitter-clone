@@ -31,7 +31,7 @@ app.use(express.json());
 
 const authRoutes = require('./routes/auth');
 
-
+const profileRoutes=require('./routes/profile');
 // APIs
 
 const postApiRoute = require('./routes/api/posts');
@@ -67,11 +67,13 @@ app.get('/', isLoggedIn,(req, res) => {
 
 // Routes
 app.use(authRoutes);
+app.use(postApiRoute);
+app.use(profileRoutes);
 
 
 // APIs
 
-app.use(postApiRoute);
+
 
 
 
