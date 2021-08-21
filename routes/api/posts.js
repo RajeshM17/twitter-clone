@@ -12,7 +12,10 @@ router.get('/api/post',isLoggedIn, async(req, res) => {
     res.json(posts);
 })
 
-
+router.get('/api/posts/:id',async(req,res)=>{
+    const post=await Post.findById(req.params.id).populate('postedBy');
+    res.json(post);
+})
 
 // Create the new post
 router.post('/api/post',isLoggedIn,async(req, res) => {

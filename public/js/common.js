@@ -30,6 +30,24 @@ $('.postsContainer').on('click','.likeButton',async(event)=>{
     button.find("span").text(postData.data.likes.length);
 
 })
+$('#submitReplyButton').click((event)=>{
+
+    const element=$(event.target);
+    const postText=$('#reply-text-container').val();
+    console.log(postText);
+
+})
+
+$('#replyModal').on('show.bs.modal',async(event)=>{
+    const button=$(event.relatedTarget);
+
+    const postId=getPostIdFromElement(button);
+    
+    const postData=await axios.get(`/api/posts/${postId}`);
+    const html=createPostHtml(postData.data);
+    $('#originalPostContainer').empty();
+    $('#originalPostContainer').append(html);
+})
 
 
 function getPostIdFromElement(element){
@@ -74,7 +92,7 @@ function createPostHtml(postData) {
                         </div>
                         <div class='postFooter'>
                             <div class='postButtonContainer'>
-                                <button>
+                            <button type="button" data-bs-toggle="modal" data-bs-target="#replyModal">
                                     <i class='far fa-comment'></i>
                                 </button>
                             </div>
