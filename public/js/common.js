@@ -66,19 +66,29 @@ function getPostIdFromElement(element){
 
 
 function createPostHtml(postData) {
-    
     const postedBy = postData.postedBy;
-
+    // console.log(postedBy);
     if(postedBy._id === undefined) {
         return console.log("User object not populated");
     }
 
     const displayName = postedBy.firstName + " " + postedBy.lastName;
     const timestamp = timeDifference(new Date(),new Date(postData.createdAt));
-    const replyTo=postData.replyTo?`replying to ${postData.replyTo}`:""
-
+    let replyFlag = "";
+    if (postData.replyTo && postData.replyTo._id) {
+      if (!postData.replyTo._id) {
+        return alert("Reply to is not populated");
+      } else if (!postData.replyTo.postedBy._id) {
+        return alert("Posted by is not populated");
+      }
+  
+      const replyToUsername = postData.replyTo.postedBy.username;
+      replyFlag = `<div class='replyFlag'>
+                            Replying to <a href='/profile/${replyToUsername}'>@${replyToUsername}<a>
+                        </div>`;
+    }
     return `<div class='post' data-id='${postData._id}'>
-
+            
                 <div class='mainContentContainer'>
                     <div class='userImageContainer'>
                         <img src='${postedBy.profilePic}'>
@@ -88,7 +98,7 @@ function createPostHtml(postData) {
                             <a href='/profile/${postedBy.username}' class='displayName'>${displayName}</a>
                             <span class='username'>@${postedBy.username}</span>
                             <span class='date'>${timestamp}</span>
-                            <div>${replyTo}</div>
+                            <div>${replyFlag}</div>
                         </div>
                         <div class='postBody'>
                             <span>${postData.content}</span>
