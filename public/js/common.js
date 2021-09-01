@@ -46,7 +46,7 @@ $('#replyModal').on('show.bs.modal',async(event)=>{
     const postId=getPostIdFromElement(button);
     $('#submitReplyButton').attr('data-id',postId);
     const postData=await axios.get(`/api/posts/${postId}`);
-    const html=createPostHtml(postData.data);
+    const html=Html(postData.data);
     $('#originalPostContainer').empty();
     $('#originalPostContainer').append(html);
 })
@@ -67,7 +67,7 @@ function getPostIdFromElement(element){
 
 function createPostHtml(postData) {
     const postedBy = postData.postedBy;
-    // console.log(postedBy);
+    console.log(postedBy);
     if(postedBy._id === undefined) {
         return console.log("User object not populated");
     }

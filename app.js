@@ -10,7 +10,7 @@ const flash = require('connect-flash');
 const {isLoggedIn} = require('./middleware')
 
 
-mongoose.connect('mongodb://localhost:27017/twitter-clone',
+mongoose.connect('mongodb+srv://rajesh:rajesh@cluster0.4hdvg.mongodb.net/twitter-clone',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,
